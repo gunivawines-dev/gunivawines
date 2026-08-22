@@ -132,6 +132,19 @@
             transform-origin: center;
             animation: watercolorBreathe 8s ease-in-out infinite;
         }
+        .guniva-logo {
+            display: inline-block;
+            color: #E10600;
+            font-family: Magneto, "Magneto Bold", "Style Script", "Brush Script MT", cursive;
+            font-size: 2.75rem;
+            font-weight: bold;
+            font-style: italic;
+            line-height: 1;
+            white-space: nowrap;
+        }
+        @media (max-width: 639px) {
+            .guniva-logo { font-size: 2.45rem; }
+        }
         .hero-photo {
             position: absolute;
             z-index: 10;
@@ -180,7 +193,7 @@
             <!-- Brand Logo with Magneto Font Styling -->
             <a href="#" class="group flex items-center space-x-3">
                 <div class="h-10 w-[150px] sm:w-[190px] flex items-center flex-shrink-0">
-                    <img src="./mywork/guniva-logo-transparent.png" alt="GunivA" width="190" height="48" onerror="this.onerror=null;this.src='./mywork/GunivA%20logo.jpg';" class="block w-full h-auto object-contain flex-none group-hover:scale-105 transition-transform duration-300">
+                    <span class="guniva-logo group-hover:scale-105 transition-transform duration-300" aria-label="GunivA">GunivA</span>
                 </div>
                 <span class="text-xs tracking-widest text-gray-400 border-l border-gray-300 pl-3 font-sans hidden sm:inline-block">酒莊佳釀</span>
             </a>
@@ -825,7 +838,7 @@
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
             <div class="text-center md:text-left space-y-3">
                 <div class="flex items-center justify-center md:justify-start">
-                    <img src="./mywork/guniva-logo-transparent.png" alt="GunivA" width="190" height="48" onerror="this.onerror=null;this.src='./mywork/GunivA%20logo.jpg';" class="block w-[150px] sm:w-[190px] h-auto object-contain flex-none">
+                    <span class="guniva-logo" aria-label="GunivA">GunivA</span>
                     <span class="text-xs font-serif tracking-widest text-gray-400 ml-3">WINERY</span>
                 </div>
                 <p class="text-xs text-gray-400 font-sans">澳大利亞 維多利亞州 蒙塔山酒莊 / 蘇蘇洛酒莊 / 奧塔瓦酒莊</p>

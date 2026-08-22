@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GunivA Winery | 滋潤情感的線條藝術與佳釀</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cormorant Garamond & Noto Serif TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Noto+Serif+TC:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Alpine.js CDN for interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Google Fonts for Magneto-styled fallback script -->
+    <link href="https://fonts.googleapis.com/css2?family=Style+Script&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wine: {
+                            red: '#9E2A2B',
+                            redLight: '#E10600', // GunivA Magneto Vibrant Red
+                            white: '#D4AF37',
+                            whiteLight: '#E6C280',
+                            rose: '#D8829D',
+                            roseLight: '#E8A598',
+                            charcoal: '#1A1A1A',
+                            paper: '#FAFAFA'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', '"Noto Serif TC"', 'serif'],
+                        sans: ['"Noto Serif TC"', 'sans-serif'],
+                        logo: ['"Style Script"', '"Cormorant Garamond"', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* CSS Keyframe animations for line drawing effect & ink splash */
+        @keyframes drawLine {
+            0% { stroke-dashoffset: 1200; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(1.06); }
+        }
+        @keyframes noteFloatA {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            33% { transform: translate(-4px, -10px) rotate(-6deg) scale(1.12); }
+            66% { transform: translate(5px, -5px) rotate(5deg) scale(0.94); }
+        }
+        @keyframes noteFloatB {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            40% { transform: translate(6px, -12px) rotate(8deg) scale(1.15); }
+            75% { transform: translate(-3px, -4px) rotate(-4deg) scale(0.96); }
+        }
+        @keyframes notePulse {
+            0%, 100% { opacity: 0.68; filter: drop-shadow(0 0 0 rgba(106, 18, 49, 0)); }
+            50% { opacity: 1; filter: drop-shadow(0 5px 8px rgba(106, 18, 49, 0.28)); }
+        }
+        @keyframes sparkleTwinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.75) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.4) rotate(45deg); filter: drop-shadow(0 0 6px rgba(225, 6, 0, 0.8)); }
+        }
+        /* Calligraphic Brush Motion Animation */
+        @keyframes brushWaveFlow {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            30% { transform: translate(-5px, 6px) rotate(-1.5deg) scale(1.01); }
+            65% { transform: translate(6px, -5px) rotate(1.8deg) scale(0.99); }
+        }
+        @keyframes inkWashBreathe {
+            0%, 100% { opacity: 0.55; filter: blur(0px); }
+            50% { opacity: 0.85; filter: blur(1px); }
+        }
+
+        .animate-draw {
+            stroke-dasharray: 1200;
+            stroke-dashoffset: 1200;
+            animation: drawLine 3.8s ease-in-out forwards;
+        }
+        .animate-brush-flow {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: brushWaveFlow 7.5s ease-in-out infinite;
+        }
+        .animate-ink-wash {
+            animation: inkWashBreathe 6s ease-in-out infinite;
+        }
+        .ink-splash {
+            animation: pulseGlow 6s ease-in-out infinite;
+        }
+        /* Musical Note & Sparkle Motion Classes */
+        .animate-note-a {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: noteFloatA 3.4s ease-in-out infinite, notePulse 3.4s ease-in-out infinite;
+        }
+        .animate-note-b {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: noteFloatB 2.8s ease-in-out infinite, notePulse 2.8s ease-in-out infinite;
+        }
+        .animate-sparkle {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: sparkleTwinkle 2.2s ease-in-out infinite;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAFAFA;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1A1A1A;
+            border-radius: 3px;
+        }
+        .music-artwork {
+            filter: drop-shadow(0 18px 25px rgba(134, 36, 68, 0.12));
+        }
+        .music-artwork .watercolor-wash {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: watercolorBreathe 8s ease-in-out infinite;
+        }
+        .hero-photo {
+            position: absolute;
+            z-index: 10;
+            height: 78%;
+            width: auto;
+            max-width: 42%;
+            object-fit: contain;
+            mix-blend-mode: multiply;
+            filter: saturate(1.08) contrast(1.03) drop-shadow(0 18px 18px rgba(106, 18, 49, 0.2));
+            animation: bottleBreathe 6s ease-in-out infinite;
+        }
+        @keyframes bottleBreathe {
+            0%, 100% { transform: translateY(2px) rotate(-1deg); }
+            50% { transform: translateY(-7px) rotate(1deg); }
+        }
+        .music-artwork #wine-glass-sketch {
+            display: none;
+        }
+        @keyframes watercolorBreathe {
+            0%, 100% { opacity: 0.55; transform: scale(1) rotate(0deg); }
+            50% { opacity: 0.8; transform: scale(1.045) rotate(1.5deg); }
+        }
+    </style>
+</head>
+<body class="bg-wine-paper text-wine-charcoal font-serif antialiased selection:bg-wine-red selection:text-white leading-relaxed"
+      x-data="wineApp()">
+
+    <!-- Reusable GunivA Magneto Logo SVG Definition -->
+    <svg class="hidden" style="display:none;">
+        <defs>
+            <g id="guniva-magneto-logo">
+                <text x="10" y="92" 
+                      font-family="Magneto, 'Magneto Bold', 'Style Script', 'Brush Script MT', cursive" 
+                      font-size="100" 
+                      font-weight="bold" 
+                      font-style="italic" 
+                      fill="#E10600" 
+                      letter-spacing="-1">GunivA</text>
+            </g>
+        </defs>
+    </svg>
+
+    <!-- Fixed Header / Navigation -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-wine-paper/90 backdrop-blur-md transition-all duration-300 border-b border-black/5">
+        <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+            <!-- Brand Logo with Magneto Font Styling -->
+            <a href="#" class="group flex items-center space-x-3">
+                <div class="h-9 sm:h-10 flex items-center">
+                    <svg viewBox="0 0 560 130" class="h-8 sm:h-9 w-auto overflow-visible group-hover:scale-105 transition-transform duration-300">
+                        <use href="#guniva-magneto-logo"></use>
+                    </svg>
+                </div>
+                <span class="text-xs tracking-widest text-gray-400 border-l border-gray-300 pl-3 font-sans hidden sm:inline-block">酒莊佳釀</span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center space-x-10 text-sm tracking-widest uppercase">
+                <a href="#about" class="hover:text-wine-red transition-colors duration-300">品牌意境</a>
+                <a href="#wineries" class="hover:text-wine-red transition-colors duration-300">澳洲三大名莊</a>
+                <a href="#collection" class="hover:text-wine-red transition-colors duration-300">佳釀系列</a>
+                <a href="#pairing" class="hover:text-wine-red transition-colors duration-300">微醺談心</a>
+                <a href="#notice" class="hover:text-wine-red transition-colors duration-300">訂購須知</a>
+            </nav>
+
+            <!-- Quick Action / Cart Indicator -->
+            <div class="flex items-center space-x-4">
+                <button @click="openCartModal = true" class="relative p-2.5 border border-black/20 hover:border-black rounded-full transition-all">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 text-black"></i>
+                    <span x-show="cartTotalItems > 0" class="absolute -top-1 -right-1 bg-wine-red text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-sans" x-text="cartTotalItems"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION: Line Art & Poetic Visual with Calligraphic Brush Art -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- Dynamic Fluid Background Glow based on Active Filter Accent -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div class="w-[500px] h-[500px] rounded-full blur-[120px] transition-all duration-1000 ink-splash"
+                 :class="{
+                    'bg-wine-red/25': activeTone === 'red',
+                    'bg-wine-white/30': activeTone === 'white',
+                    'bg-wine-rose/30': activeTone === 'rose'
+                 }"></div>
+        </div>
+
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 py-12">
+            <!-- Left: Poetic Text Content -->
+            <div class="lg:col-span-6 space-y-8 text-center lg:text-left">
+                <div class="inline-block border-b border-black/30 pb-2">
+                    <p class="text-xs uppercase tracking-[0.4em] text-gray-500 font-sans">WARMTH & LIGHTNESS IN WINE</p>
+                </div>
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light tracking-wide text-black leading-tight">
+                    <span class="block whitespace-nowrap">開一瓶酒．聚一段溫暖時光</span>
+                    <span class="italic text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-700 font-serif mt-2 block whitespace-nowrap">滋潤情感．隨心放鬆的生活態度</span>
+                </h1>
+                <p class="text-base text-gray-600 font-sans font-light max-w-lg leading-relaxed mx-auto lg:mx-0">
+                    紅酒是滋潤情感的溫柔潤滑劑，亦是一種隨心舒展的生活態度。褪去繁複沉重的包裝束縛，GunivA 以簡約柔和的線條與溫暖陽光，為您與摯友的每一次相聚，獻上最輕盈真摯的微醺時光。
+                </p>
+
+                <!-- Mood Tone Color Switchers -->
+                <div class="pt-4 flex items-center justify-center lg:justify-start space-x-6">
+                    <span class="text-xs tracking-widest text-gray-400 font-sans uppercase">微醺調色盤：</span>
+                    <button @click="setTone('red')" :class="activeTone === 'red' ? 'ring-2 ring-wine-red scale-110' : 'opacity-60'" class="w-6 h-6 rounded-full bg-wine-red transition-all duration-300" title="紅葡萄酒紅調"></button>
+                    <button @click="setTone('white')" :class="activeTone === 'white' ? 'ring-2 ring-wine-white scale-110' : 'opacity-60'" class="w-6 h-6 rounded-full bg-wine-white transition-all duration-300" title="白葡萄酒金調"></button>
+                    <button @click="setTone('rose')" :class="activeTone === 'rose' ? 'ring-2 ring-wine-rose scale-110' : 'opacity-60'" class="w-6 h-6 rounded-full bg-wine-rose transition-all duration-300" title="粉紅酒柔調"></button>
+                </div>
+
+                <div class="pt-6">
+                    <a href="#collection" class="inline-flex items-center space-x-4 border border-black px-8 py-3.5 hover:bg-black hover:text-white transition-all duration-300 text-sm tracking-widest uppercase rounded-full">
+                        <span>探索 GunivA 佳釀</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right: Original Elegant Line Art Artwork -->
+            <div class="lg:col-span-6 flex justify-center items-center relative lg:translate-x-6">
+                <div class="w-full max-w-lg aspect-square relative flex items-center justify-center">
+                    <img src="mywork/jimmy-rose.png" alt="GunivA 玫瑰酒瓶" class="hero-photo">
+                    
+                    <svg viewBox="0 0 500 600" class="music-artwork w-full h-full drop-shadow-xl overflow-visible">
+                        <defs>
+                            <!-- Premium Red Liquid Gradient -->
+                            <radialGradient id="redLiquid" cx="45%" cy="30%" r="70%">
+                                <stop offset="0%" :stop-color="activeTone === 'red' ? '#E10600' : (activeTone === 'white' ? '#FFE8A3' : '#FF9EAA')" stop-opacity="0.9" />
+                                <stop offset="60%" :stop-color="activeTone === 'red' ? '#9E2A2B' : (activeTone === 'white' ? '#D4AF37' : '#E87A90')" stop-opacity="0.85" />
+                                <stop offset="100%" :stop-color="activeTone === 'red' ? '#580007' : (activeTone === 'white' ? '#8B6508' : '#701030')" stop-opacity="0.95" />
+                            </radialGradient>
+
+                            <!-- Wine & Line Glow Filter -->
+                            <filter id="wineGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="2.5" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                            <filter id="watercolorTexture" x="-20%" y="-20%" width="140%" height="140%">
+                                <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="9" result="noise" />
+                                <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" />
+                            </filter>
+
+                            <!-- Reusable Musical Note Shapes -->
+                            <g id="eighth-note">
+                                <ellipse cx="6" cy="18" rx="4" ry="3" transform="rotate(-20 6 18)" fill="#681432" />
+                                <path d="M 10,17 L 10,2 L 18,5 L 18,9 L 10,6" fill="#681432" />
+                            </g>
+                            <g id="quarter-note">
+                                <ellipse cx="5" cy="15" rx="4" ry="3" transform="rotate(-20 5 15)" fill="#681432" />
+                                <path d="M 9,14 L 9,0" stroke="#681432" stroke-width="1.8" stroke-linecap="round" />
+                            </g>
+                        </defs>
+
+                        <!-- PINK WATERCOLOR ATMOSPHERE (粉紅潑墨氛圍) -->
+                        <g class="watercolor-wash" filter="url(#watercolorTexture)">
+                            <path d="M 310,40 C 420,30 505,95 478,185 C 456,255 500,320 448,382 C 390,451 300,420 270,350 C 241,282 274,220 255,150 C 240,94 266,53 310,40 Z" fill="#e28aa4" opacity="0.3" />
+                            <path d="M 345,82 C 430,57 490,130 460,202 C 432,269 481,328 425,380 C 362,438 299,375 301,307 C 303,244 270,175 298,124 C 310,102 326,90 345,82 Z" fill="#c94d79" opacity="0.26" />
+                            <circle cx="425" cy="150" r="66" fill="#edb3c1" opacity="0.34" />
+                            <circle cx="390" cy="380" r="90" fill="#d66a8c" opacity="0.18" />
+                            <g fill="#a22d58" opacity="0.55">
+                                <circle cx="414" cy="72" r="4" /><circle cx="452" cy="102" r="7" /><circle cx="468" cy="230" r="3" />
+                                <circle cx="374" cy="438" r="5" /><circle cx="440" cy="410" r="3" /><circle cx="322" cy="98" r="3" />
+                            </g>
+                        </g>
+
+                        <!-- FIVE-LINE MUSIC STAFF (向右下流動的五線譜) -->
+                        <g id="music-staff-lines" opacity="0.68" class="animate-brush-flow">
+                            <path d="M 22,455 C 110,435 175,385 228,332 C 294,265 319,202 369,150 C 407,111 438,101 477,119" fill="none" stroke="#681432" stroke-width="1.25" stroke-linecap="round" class="animate-draw" />
+                            <path d="M 27,468 C 115,448 180,398 233,345 C 299,278 324,215 374,163 C 412,124 443,114 482,132" fill="none" stroke="#681432" stroke-width="1" stroke-linecap="round" />
+                            <path d="M 32,481 C 120,461 185,411 238,358 C 304,291 329,228 379,176 C 417,137 448,127 487,145" fill="none" stroke="#681432" stroke-width="1" stroke-linecap="round" />
+                            <path d="M 37,494 C 125,474 190,424 243,371 C 309,304 334,241 384,189 C 422,150 453,140 492,158" fill="none" stroke="#681432" stroke-width="1" stroke-linecap="round" />
+                            <path d="M 42,507 C 130,487 195,437 248,384 C 314,317 339,254 389,202 C 427,163 458,153 497,171" fill="none" stroke="#681432" stroke-width="1.25" stroke-linecap="round" />
+                        </g>
+
+                        <!-- ELEGANT CONTINUOUS LINE ART BORDEAUX WINE GLASS (極簡極細線描酒杯) -->
+                        <g id="wine-glass-sketch">
+                            <!-- Glass Rim -->
+                            <ellipse cx="250" cy="140" rx="55" ry="10" fill="none" stroke="#1A1A1A" stroke-width="2" />
+
+                            <!-- Glass Bowl Outer Line (流暢單線) -->
+                            <path d="M 195,140 C 170,210 168,285 200,325 C 218,348 238,360 250,360 C 262,360 282,348 300,325 C 332,285 330,210 305,140" 
+                                  fill="none" stroke="#1A1A1A" stroke-width="2.2" stroke-linecap="round" />
+
+                            <!-- Highlight Accent Line -->
+                            <path d="M 191,180 C 182,225 184,270 196,310" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.9" />
+
+                            <!-- WINE SWIRL IN GLASS (杯中輕盈酒浪) -->
+                            <g filter="url(#wineGlow)">
+                                <path d="M 315,185 C 322,245 305,330 250,346 C 205,343 180,300 192,245 C 208,195 242,205 240,235 C 236,258 212,258 206,242 C 200,222 220,218 236,234 C 255,254 220,295 195,262 C 178,240 186,190 205,176 C 248,198 300,220 315,185 Z" 
+                                      fill="url(#redLiquid)" 
+                                      class="transition-all duration-700 ease-out transform origin-center hover:scale-105" />
+
+                                <path d="M 315,183 C 320,247 303,330 250,346 C 205,343 180,300 192,245" 
+                                      fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round" />
+                            </g>
+
+                            <!-- Glass Stem -->
+                            <path d="M 250,360 L 250,470" stroke="#1A1A1A" stroke-width="2.6" stroke-linecap="round" />
+
+                            <!-- Base -->
+                            <ellipse cx="250" cy="470" rx="60" ry="12" fill="none" stroke="#1A1A1A" stroke-width="2.2" />
+                        </g>
+
+                        <!-- DANCING MUSICAL NOTES (跳躍音符) -->
+                        <g id="musical-notes-group">
+                            <g class="animate-note-a" style="animation-delay: 0s;">
+                                <use href="#eighth-note" x="70" y="420" transform="rotate(15 70 420) scale(1.1)" />
+                            </g>
+                            <g class="animate-note-b" style="animation-delay: 0.5s;">
+                                <use href="#quarter-note" x="130" y="340" transform="rotate(-12 130 340) scale(1.2)" />
+                            </g>
+                            <g class="animate-note-a" style="animation-delay: 1.0s;">
+                                <use href="#eighth-note" x="200" y="150" transform="rotate(-20 200 150) scale(1.1)" />
+                            </g>
+                            <g class="animate-note-b" style="animation-delay: 0.8s;">
+                                <use href="#quarter-note" x="350" y="240" transform="rotate(18 350 240) scale(1.2)" />
+                            </g>
+                            <g class="animate-note-a" style="animation-delay: 1.4s;">
+                                <use href="#eighth-note" x="420" y="100" transform="rotate(-10 420 100) scale(1.3)" />
+                            </g>
+                        </g>
+
+                        <!-- SPARKLES & DROPLETS -->
+                        <g id="wine-droplets">
+                            <circle class="animate-sparkle" style="animation-delay: 0.2s;" cx="258" cy="45" r="4.5" :fill="activeTone === 'red' ? '#9E2A2B' : (activeTone === 'white' ? '#D4AF37' : '#D8829D')" />
+                            <circle class="animate-sparkle" style="animation-delay: 0.8s;" cx="270" cy="25" r="3" :fill="activeTone === 'red' ? '#E10600' : (activeTone === 'white' ? '#FFE8A3' : '#FF9EAA')" />
+                            <circle class="animate-sparkle" style="animation-delay: 1.2s;" cx="310" cy="40" r="3.5" :fill="activeTone === 'red' ? '#9E2A2B' : (activeTone === 'white' ? '#D4AF37' : '#D8829D')" />
+                        </g>
+                    </svg>
+
+                    <!-- Romantic Quote Overlay Badge -->
+                    <div class="absolute bottom-1 right-2 bg-white/90 backdrop-blur-md border border-black/10 px-5 py-2.5 rounded-full text-xs italic tracking-widest text-gray-800 shadow-sm">
+                        <span class="inline-block w-2 h-2 rounded-full bg-wine-red mr-2"></span>
+                        "簡約線條，溫暖陽光，輕盈真摯的微醺"
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: BRAND ESSENCE (品牌意境) -->
+    <section id="about" class="py-24 border-t border-b border-black/5 bg-white relative">
+        <div class="max-w-4xl mx-auto px-6 text-center space-y-12">
+            <div class="space-y-3">
+                <span class="text-xs uppercase tracking-[0.5em] text-gray-400 font-sans">Philosophy of GunivA</span>
+                <h2 class="text-3xl md:text-4xl font-light text-black tracking-widest">隨心放鬆的微醺美學</h2>
+                <div class="w-12 h-[1px] bg-wine-red mx-auto"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left py-6">
+                <div class="p-6 border border-black/5 hover:border-black/20 transition-all duration-300 bg-wine-paper rounded-2xl">
+                    <div class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-xs font-serif mb-4">一</div>
+                    <h3 class="text-lg font-normal mb-2 text-black">開一瓶酒 · 溫暖時光</h3>
+                    <p class="text-xs text-gray-500 font-sans leading-relaxed">
+                        拔開木塞的輕響，拉開舒緩時光的序幕，讓溫暖的光影在杯中悠揚流轉。
+                    </p>
+                </div>
+                <div class="p-6 border border-black/5 hover:border-black/20 transition-all duration-300 bg-wine-paper rounded-2xl">
+                    <div class="w-8 h-8 rounded-full bg-wine-red text-white flex items-center justify-center text-xs font-serif mb-4">二</div>
+                    <h3 class="text-lg font-normal mb-2 text-black">滋潤情感 · 柔和交融</h3>
+                    <p class="text-xs text-gray-500 font-sans leading-relaxed">
+                        紅酒是相聚時情感的潤滑劑，以溫柔自然的香氣，拉近彼此的心靈距離。
+                    </p>
+                </div>
+                <div class="p-6 border border-black/5 hover:border-black/20 transition-all duration-300 bg-wine-paper rounded-2xl">
+                    <div class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-xs font-serif mb-4">三</div>
+                    <h3 class="text-lg font-normal mb-2 text-black">褪去繁複 · 真摯輕盈</h3>
+                    <p class="text-xs text-gray-500 font-sans leading-relaxed">
+                        捨棄沉重繁複的包裝束縛，回歸最簡約柔和的線條，享受無負擔的純粹美好。
+                    </p>
+                </div>
+            </div>
+
+            <p class="text-sm text-gray-500 italic max-w-xl mx-auto font-serif">
+                「以簡約柔和的線條與溫暖陽光，為您與摯友的每一次相聚，獻上最輕盈真摯的微醺時光。」
+            </p>
+        </div>
+    </section>
+
+    <!-- SECTION 2.5: THREE PARTNER WINERIES IN VICTORIA (澳洲三大名莊) -->
+    <section id="wineries" class="py-24 bg-wine-paper relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center space-y-3 mb-16">
+                <span class="text-xs uppercase tracking-[0.5em] text-gray-400 font-sans">Victoria Terroir & Heritage</span>
+                <h2 class="text-3xl md:text-4xl font-light text-black tracking-widest">澳洲維多利亞州 · 三大合作酒莊</h2>
+                <div class="w-12 h-[1px] bg-wine-red mx-auto"></div>
+                <p class="text-xs text-gray-500 font-sans max-w-2xl mx-auto pt-2">
+                    GunivA 嚴選坐落於澳大利亞維多利亞州的頂級釀酒園區，結合壯麗的地質歷史、低干預藝術工藝與音樂和聲哲學，打造獨一無二的液體藝術品。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Montara Winery -->
+                <div class="bg-white border border-gray-100 rounded-3xl p-8 hover:shadow-xl transition-all duration-500 flex flex-col justify-between group">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+                            <span class="text-[10px] tracking-widest uppercase font-sans text-wine-red font-bold">Grampians Terroir</span>
+                            <span class="text-xs font-serif text-gray-400">1880s 沉澱至今</span>
+                        </div>
+                        <h3 class="text-2xl font-normal text-black group-hover:text-wine-red transition-colors">Montara Winery</h3>
+                        <p class="text-xs text-wine-red font-sans tracking-widest font-semibold">蒙塔山酒莊 · 兩億年的風土傳奇</p>
+                        
+                        <p class="text-xs text-gray-600 font-sans leading-relaxed pt-2">
+                            坐落於著名的格蘭屏國家公園（Grampians National Park），擁有壯麗的兩億多年歷史巨型砂岩懸崖與深厚的原住民聖地文化。這裡亦孕育了南半球最古老的淘金熱潮與釀酒歷史，將萬物地質的偉大能量淬鍊入每一滴酒液。
+                        </p>
+                    </div>
+
+                    <div class="pt-8 border-t border-gray-100 mt-6 flex items-center justify-between">
+                        <span class="text-[11px] text-gray-400 font-sans">代表作：Jimmy / Chalambar Road</span>
+                        <span class="inline-flex items-center text-xs font-sans font-medium text-black group-hover:translate-x-1 transition-transform">
+                            探索酒款 <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Susuro Wines -->
+                <div class="bg-white border border-gray-100 rounded-3xl p-8 hover:shadow-xl transition-all duration-500 flex flex-col justify-between group">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+                            <span class="text-[10px] tracking-widest uppercase font-sans text-wine-rose font-bold">Artisanal Low-Intervention</span>
+                            <span class="text-xs font-serif text-gray-400">義大利原生品種</span>
+                        </div>
+                        <h3 class="text-2xl font-normal text-black group-hover:text-wine-rose transition-colors">Susuro Wines</h3>
+                        <p class="text-xs text-wine-rose font-sans tracking-widest font-semibold">蘇蘇羅酒莊 · 叛逆色彩的手工拼貼</p>
+                        
+                        <p class="text-xs text-gray-600 font-sans leading-relaxed pt-2">
+                            以「低干預」手工釀造技術為核心，專注於詮釋義大利傳統葡萄品種的靈動生命力。其酒標設計大膽潑辣，融合色彩斑斕且充滿現代藝術感的現代手繪與拼貼風格，展現極具個性的視覺與味覺雙重震撼。
+                        </p>
+                    </div>
+
+                    <div class="pt-8 border-t border-gray-100 mt-6 flex items-center justify-between">
+                        <span class="text-[11px] text-gray-400 font-sans">代表作：Montepuliciano / Nero d'Avola</span>
+                        <span class="inline-flex items-center text-xs font-sans font-medium text-black group-hover:translate-x-1 transition-transform">
+                            探索酒款 <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- OCTTAVA Wines -->
+                <div class="bg-white border border-gray-100 rounded-3xl p-8 hover:shadow-xl transition-all duration-500 flex flex-col justify-between group">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+                            <span class="text-[10px] tracking-widest uppercase font-sans text-wine-white font-bold">Symphony & Elegance</span>
+                            <span class="text-xs font-serif text-gray-400">釀酒師 Nikki Palun</span>
+                        </div>
+                        <h3 class="text-2xl font-normal text-black group-hover:text-wine-white transition-colors">OCTTAVA Wines</h3>
+                        <p class="text-xs text-wine-white font-sans tracking-widest font-semibold">奧塔瓦酒莊 · 音樂交響的優雅古典派</p>
+                        
+                        <p class="text-xs text-gray-600 font-sans leading-relaxed pt-2">
+                            由知名女釀酒師 Nikki Palun 所創立的精品品牌，將「音樂交響樂」的樂章層次與「經典葡萄品種」完美交織。走優雅、結構均衡且細膩豐富的傳統「古典派」風格，如同大提琴深沉而動人的旋律。
+                        </p>
+                    </div>
+
+                    <div class="pt-8 border-t border-gray-100 mt-6 flex items-center justify-between">
+                        <span class="text-[11px] text-gray-400 font-sans">代表作：Violoncello Shiraz</span>
+                        <span class="inline-flex items-center text-xs font-sans font-medium text-black group-hover:translate-x-1 transition-transform">
+                            探索酒款 <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: WINE COLLECTION (佳釀系列) -->
+    <section id="collection" class="py-24 max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-black/10 pb-6">
+            <div class="space-y-2">
+                <span class="text-xs uppercase tracking-[0.4em] text-gray-400 font-sans">GunivA Portfolio</span>
+                <h2 class="text-3xl md:text-4xl font-light text-black tracking-widest">GunivA 葡萄酒作品清單</h2>
+            </div>
+
+            <!-- Category Filter Tabs -->
+            <div class="mt-6 md:mt-0 flex flex-wrap gap-2 text-xs font-sans tracking-widest">
+                <button @click="filterType = 'all'" :class="filterType === 'all' ? 'bg-black text-white' : 'border border-gray-200 text-gray-600 hover:border-black'" class="px-5 py-2.5 rounded-full transition duration-300">全部款式</button>
+                <button @click="filterType = 'red'" :class="filterType === 'red' ? 'bg-wine-red text-white' : 'border border-gray-200 text-gray-600 hover:border-black'" class="px-5 py-2.5 rounded-full transition duration-300">紅葡萄酒</button>
+                <button @click="filterType = 'white'" :class="filterType === 'white' ? 'bg-wine-white text-black' : 'border border-gray-200 text-gray-600 hover:border-black'" class="px-5 py-2.5 rounded-full transition duration-300">白葡萄酒</button>
+                <button @click="filterType = 'rose'" :class="filterType === 'rose' ? 'bg-wine-rose text-white' : 'border border-gray-200 text-gray-600 hover:border-black'" class="px-5 py-2.5 rounded-full transition duration-300">粉紅葡萄酒</button>
+                <button @click="filterType = 'gift'" :class="filterType === 'gift' ? 'bg-black text-white' : 'border border-gray-200 text-gray-600 hover:border-black'" class="px-5 py-2.5 rounded-full transition duration-300">客製禮盒</button>
+            </div>
+        </div>
+
+        <!-- Series Filter Sub-bar -->
+        <div class="flex items-center space-x-6 text-xs text-gray-500 font-sans mb-10 overflow-x-auto pb-2">
+            <span class="whitespace-nowrap font-semibold">系列級別：</span>
+            <button @click="filterSeries = 'all'" :class="filterSeries === 'all' ? 'text-black font-bold border-b border-black' : 'hover:text-black'" class="pb-1">全部級別</button>
+            <button @click="filterSeries = '特級款'" :class="filterSeries === '特級款' ? 'text-black font-bold border-b border-black' : 'hover:text-black'" class="pb-1">特級款</button>
+            <button @click="filterSeries = '特藏款'" :class="filterSeries === '特藏款' ? 'text-black font-bold border-b border-black' : 'hover:text-black'" class="pb-1">特藏款</button>
+            <button @click="filterSeries = '限量經典款'" :class="filterSeries === '限量經典款' ? 'text-black font-bold border-b border-black' : 'hover:text-black'" class="pb-1">限量經典款</button>
+            <button @click="filterSeries = '限量珍藏款'" :class="filterSeries === '限量珍藏款' ? 'text-black font-bold border-b border-black' : 'hover:text-black'" class="pb-1">限量珍藏款</button>
+        </div>
+
+        <!-- Wine Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <template x-for="wine in filteredWines" :key="wine.id">
+                <div class="group bg-white border border-gray-100 hover:border-black/20 transition-all duration-500 flex flex-col justify-between p-6 relative hover:shadow-xl rounded-2xl overflow-hidden">
+                    
+                    <!-- Wine Type Accent Line -->
+                    <div class="h-1 w-full mb-4 rounded-full" :class="{
+                        'bg-wine-red': wine.type === 'red',
+                        'bg-wine-white': wine.type === 'white',
+                        'bg-wine-rose': wine.type === 'rose',
+                        'bg-gray-800': wine.type === 'gift'
+                    }"></div>
+
+                    <div>
+                        <!-- Header info -->
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[10px] tracking-widest uppercase font-sans text-gray-400" x-text="wine.series"></span>
+                        </div>
+
+                        <!-- Product photo with line-art fallback for items without a local image -->
+                        <div class="h-48 my-4 flex items-center justify-center relative overflow-hidden bg-wine-paper/50 rounded-xl">
+                            <template x-if="wine.image">
+                                <img :src="wine.image" :alt="wine.nameZh" class="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500">
+                            </template>
+                            <template x-if="!wine.image">
+                                <svg viewBox="0 0 100 200" class="h-40 stroke-current text-black group-hover:scale-105 transition-transform duration-500">
+                                <path d="M 35,190 L 35,80 C 35,60 42,50 42,30 L 42,10 L 58,10 L 58,30 C 58,50 65,60 65,80 L 65,190 Z" 
+                                      fill="none" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M 37,188 L 37,110 C 37,100 63,100 63,110 L 63,188 Z" 
+                                      :fill="wine.type === 'red' ? '#9E2A2B' : (wine.type === 'white' ? '#E6C280' : (wine.type === 'rose' ? '#D8829D' : '#333333'))" 
+                                      opacity="0.3" />
+                                </svg>
+                            </template>
+                            
+                            <template x-if="wine.type === 'gift'">
+                                <div class="absolute inset-0 flex items-center justify-center bg-black/5 p-4 text-center rounded-xl">
+                                    <span class="text-xs font-serif italic text-gray-700">可客製雷射雕刻名字/祝福語</span>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Titles -->
+                        <h3 class="text-base font-normal text-black mb-1 line-clamp-1" x-text="wine.nameEn"></h3>
+                        <p class="text-sm text-gray-600 font-sans font-light mb-4 line-clamp-1" x-text="wine.nameZh"></p>
+                        
+                        <!-- Origin -->
+                        <p class="text-[11px] text-gray-400 font-sans leading-tight mb-4 flex items-center" x-text="wine.region">
+                            <i data-lucide="map-pin" class="w-3 h-3 mr-1"></i>
+                        </p>
+                    </div>
+
+                    <!-- Bottom Price & Order -->
+                    <div class="border-t border-gray-100 pt-4 flex items-center justify-between">
+                        <div>
+                            <template x-if="wine.type !== 'gift'">
+                                <div>
+                                    <span class="text-xs text-gray-400 font-sans">NT$</span>
+                                    <span class="text-lg font-serif font-semibold text-black" x-text="wine.price"></span>
+                                </div>
+                            </template>
+                            <template x-if="wine.type === 'gift'">
+                                <span class="text-xs font-sans text-wine-red font-medium">提供圖樣 / 文字雷雕</span>
+                            </template>
+                        </div>
+                        <button @click="addToCart(wine)" class="px-4 py-1.5 border border-black hover:bg-black hover:text-white transition-colors duration-300 text-xs font-sans tracking-wider rounded-full"
+                                x-text="wine.type === 'gift' ? '預約客製' : '加入單品'">
+                        </button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </section>
+
+    <!-- SECTION 4: INTERACTIVE WINE PAIRING ASSISTANT (微醺談心適配器) -->
+    <section id="pairing" class="py-20 bg-wine-paper border-t border-black/5">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center space-y-3 mb-10">
+                <span class="text-xs uppercase tracking-[0.4em] text-gray-400 font-sans">Interactive Mood Finder</span>
+                <h2 class="text-3xl font-light text-black">尋找今夜談心的搭配佳釀</h2>
+                <p class="text-xs text-gray-500 font-sans">請選擇您今晚的心情與談話對象：</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-5 mb-8">
+                <button @click="mood = 'romantic'" 
+                        :class="mood === 'romantic' ? 'border-wine-red bg-wine-red/5 font-bold shadow-sm ring-1 ring-wine-red/30' : 'border-gray-200/80 bg-white/80 hover:border-black/30'" 
+                        class="p-5 rounded-2xl border text-center transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+                    <i data-lucide="heart" class="w-5 h-5 mx-auto mb-2.5 text-wine-red"></i>
+                    <span class="text-xs font-sans block tracking-wider">深夜談情 · 浪漫對飲</span>
+                </button>
+                <button @click="mood = 'friend'" 
+                        :class="mood === 'friend' ? 'border-wine-red bg-wine-red/5 font-bold shadow-sm ring-1 ring-wine-red/30' : 'border-gray-200/80 bg-white/80 hover:border-black/30'" 
+                        class="p-5 rounded-2xl border text-center transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+                    <i data-lucide="users" class="w-5 h-5 mx-auto mb-2.5 text-gray-700"></i>
+                    <span class="text-xs font-sans block tracking-wider">知己談心 · 摯友重聚</span>
+                </button>
+                <button @click="mood = 'solitude'" 
+                        :class="mood === 'solitude' ? 'border-wine-red bg-wine-red/5 font-bold shadow-sm ring-1 ring-wine-red/30' : 'border-gray-200/80 bg-white/80 hover:border-black/30'" 
+                        class="p-5 rounded-2xl border text-center transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+                    <i data-lucide="moon" class="w-5 h-5 mx-auto mb-2.5 text-wine-white"></i>
+                    <span class="text-xs font-sans block tracking-wider">獨處思考 · 談天談地</span>
+                </button>
+                <button @click="mood = 'gift'" 
+                        :class="mood === 'gift' ? 'border-wine-red bg-wine-red/5 font-bold shadow-sm ring-1 ring-wine-red/30' : 'border-gray-200/80 bg-white/80 hover:border-black/30'" 
+                        class="p-5 rounded-2xl border text-center transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+                    <i data-lucide="gift" class="w-5 h-5 mx-auto mb-2.5 text-gray-800"></i>
+                    <span class="text-xs font-sans block tracking-wider">尊貴心意 · 高級贈禮</span>
+                </button>
+            </div>
+
+            <!-- Recommendation Display Box -->
+            <div class="bg-white/90 backdrop-blur-md border border-black/10 p-8 rounded-2xl shadow-sm text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6" x-show="recommendedWine">
+                <div class="space-y-2">
+                    <span class="text-[10px] tracking-widest text-wine-red font-sans uppercase">微醺推薦 Recommendation</span>
+                    <h3 class="text-xl font-normal text-black" x-text="recommendedWine.nameEn + ' (' + recommendedWine.nameZh + ')'"></h3>
+                    <p class="text-xs text-gray-500 font-sans" x-text="recommendedWine.quote"></p>
+                    <p class="text-sm font-semibold text-black font-serif pt-2" x-text="recommendedWine.type === 'gift' ? '可提供圖樣或文字專屬客製雷雕' : 'NT$ ' + recommendedWine.price + ' / 瓶'"></p>
+                </div>
+                <button @click="addToCart(recommendedWine)" class="px-7 py-3.5 bg-black text-white text-xs font-sans tracking-widest uppercase hover:bg-wine-red transition-all rounded-full whitespace-nowrap shadow-sm hover:shadow">
+                    選擇此款佳釀
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: NOTICE & SHIPPING RULES (訂購須知) -->
+    <section id="notice" class="py-20 max-w-5xl mx-auto px-6 border-t border-black/5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+            <div class="space-y-6">
+                <div class="space-y-2">
+                    <span class="text-xs uppercase tracking-[0.4em] text-gray-400 font-sans">Shipping & Terms</span>
+                    <h2 class="text-2xl font-light text-black">訂購與宅配須知</h2>
+                </div>
+                <ul class="space-y-4 text-xs font-sans text-gray-600 leading-relaxed border-l border-black/20 pl-4">
+                    <li>
+                        <strong class="text-black block mb-1">以箱為出貨單位：</strong>
+                        以上報價出貨皆以箱為單位，每箱固定為 6 瓶。（價格不含運費）
+                    </li>
+                    <li>
+                        <strong class="text-black block mb-1">黑貓宅急便常溫宅配：</strong>
+                        全台地區統一合作運費為 NT$170/箱。
+                    </li>
+                    <li class="text-wine-red font-medium">
+                        <strong class="block mb-1">免運優惠方案：</strong>
+                        單次訂購 兩箱以上（含兩箱），享全台免費宅配到府。
+                    </li>
+                    <li>
+                        <strong class="text-black block mb-1">客製松木禮盒雕刻：</strong>
+                        高級松木禮盒提供專屬雷射雕刻服務，可由您提供圖樣或文字進行客製化雕刻。
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Customer Interactive Contact Card -->
+            <div class="bg-white p-8 border border-black/10 rounded-3xl shadow-sm space-y-6 relative overflow-hidden">
+                <div class="space-y-2 border-b border-gray-100 pb-4">
+                    <span class="text-[10px] uppercase tracking-[0.3em] text-wine-red font-sans font-bold">Interactive Concierge</span>
+                    <h3 class="text-xl font-normal text-black font-serif">專屬品酒諮詢與即時聯絡</h3>
+                    <p class="text-xs text-gray-500 font-sans">有任何佳釀選擇、禮盒雷雕客製或餐酒搭配疑問？隨時與我們的侍酒專員互動。</p>
+                </div>
+
+                <div>
+                    <a href="https://line.me" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center space-x-2 bg-[#06C755] text-white py-3 px-4 rounded-full text-xs font-sans hover:opacity-90 transition duration-300 shadow-sm w-full">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i>
+                        <span class="font-medium">LINE 官方帳號線上諮詢</span>
+                    </a>
+                </div>
+
+                <form @submit.prevent="submitContact()" class="space-y-3 pt-2">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] text-gray-500 font-sans mb-1">您的尊稱 *</label>
+                            <input type="text" x-model="contactForm.name" placeholder="例如：陳先生 / 女士" class="w-full border border-gray-200 p-2.5 text-xs focus:outline-none focus:border-black rounded-xl bg-wine-paper/30" required />
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-gray-500 font-sans mb-1">聯絡電話 / LINE ID *</label>
+                            <input type="text" x-model="contactForm.contact" placeholder="09xx-xxx-xxx" class="w-full border border-gray-200 p-2.5 text-xs focus:outline-none focus:border-black rounded-xl bg-wine-paper/30" required />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] text-gray-500 font-sans mb-1">諮詢需求類型</label>
+                        <select x-model="contactForm.type" class="w-full border border-gray-200 p-2.5 text-xs focus:outline-none focus:border-black rounded-xl bg-wine-paper/30">
+                            <option value="品酒推薦">今夜選酒 / 談心微醺推薦</option>
+                            <option value="客製雷雕禮盒">松木禮盒專屬雷射雕刻客製</option>
+                            <option value="企業團購合作">企業三節採購 / 大量訂購</option>
+                            <option value="餐廳與通路上架">餐廳合作 / 通路經銷詢價</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] text-gray-500 font-sans mb-1">諮詢內容 / 備註需求</label>
+                        <textarea x-model="contactForm.message" rows="2" placeholder="請告訴我們您的品味偏好、欲刻印的文字或預計送禮場合..." class="w-full border border-gray-200 p-2.5 text-xs focus:outline-none focus:border-black rounded-xl bg-wine-paper/30"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-black text-white text-xs tracking-widest uppercase hover:bg-wine-red transition duration-300 rounded-full font-sans shadow-md">
+                        送出諮詢 · 專員 24H 內回覆
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHOPPING BAG / INQUIRY MODAL -->
+    <div x-show="openCartModal" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-sm flex justify-end"
+         style="display: none;">
+        
+        <div class="w-full max-w-md bg-white h-full shadow-2xl flex flex-col justify-between p-6 overflow-y-auto rounded-l-3xl">
+            <div>
+                <div class="flex items-center justify-between pb-4 border-b border-gray-200">
+                    <h3 class="text-lg font-serif tracking-widest text-black">GunivA 預約預訂單</h3>
+                    <button @click="openCartModal = false" class="text-gray-400 hover:text-black">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+
+                <div class="py-6 space-y-4">
+                    <template x-if="cart.length === 0">
+                        <p class="text-center text-xs text-gray-400 font-sans py-12">您的品酒清單目前是空的。</p>
+                    </template>
+
+                    <template x-for="(item, index) in cart" :key="index">
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                            <div>
+                                <h4 class="text-xs font-semibold text-black" x-text="item.nameEn"></h4>
+                                <p class="text-[11px] text-gray-500 font-sans" x-text="item.nameZh"></p>
+                                <p class="text-xs font-serif text-wine-red mt-1" x-text="item.type === 'gift' ? '專屬客製雷雕服務' : 'NT$ ' + item.price"></p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <button @click="updateQty(index, -1)" class="w-6 h-6 border border-gray-300 text-xs flex items-center justify-center rounded-full hover:border-black transition-colors">-</button>
+                                <span class="text-xs font-sans" x-text="item.qty"></span>
+                                <button @click="updateQty(index, 1)" class="w-6 h-6 border border-gray-300 text-xs flex items-center justify-center rounded-full hover:border-black transition-colors">+</button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 pt-6 space-y-4 font-sans text-xs">
+                <div class="space-y-1 text-gray-600">
+                    <div class="flex justify-between">
+                        <span>總瓶數：</span>
+                        <span x-text="cartTotalBottles + ' 瓶'"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>換算箱數（以6瓶/箱計）：</span>
+                        <span class="font-bold text-black" x-text="calculatedBoxes + ' 箱'"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>估算宅配運費：</span>
+                        <span x-text="shippingCost === 0 ? '免運 (滿2箱)' : 'NT$ ' + shippingCost"></span>
+                    </div>
+                    <div class="flex justify-between text-sm font-bold text-black pt-2 border-t border-gray-100">
+                        <span>預估小計（不含運費）：</span>
+                        <span class="text-wine-red" x-text="'NT$ ' + grandTotal"></span>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-[11px] text-gray-500">客製雕刻 / 備註事項：</label>
+                    <textarea x-model="orderNote" placeholder="若訂購松木禮盒，請在此填寫刻字內容..." class="w-full border border-gray-200 p-3 text-xs focus:outline-none focus:border-black rounded-xl"></textarea>
+                </div>
+
+                <button @click="submitOrder()" class="w-full py-3.5 bg-black text-white text-xs tracking-widest uppercase hover:bg-wine-red transition duration-300 rounded-full shadow-md">
+                    送出預訂專人聯繫
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUCCESS / NOTIFICATION MODAL -->
+    <div x-show="showSuccessModal"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+         style="display: none;">
+        <div class="bg-white max-w-sm w-full rounded-3xl p-8 text-center space-y-5 shadow-2xl border border-black/10">
+            <div class="w-12 h-12 bg-wine-red/10 text-wine-red rounded-full flex items-center justify-center mx-auto">
+                <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-xl font-normal text-black font-serif">預訂單已成功送出</h3>
+                <p class="text-xs text-gray-500 font-sans leading-relaxed" x-text="modalMessage"></p>
+            </div>
+            <button @click="showSuccessModal = false" class="w-full py-3 bg-black text-white text-xs tracking-widest uppercase rounded-full hover:bg-wine-red transition-colors font-sans">
+                確認並返回
+            </button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-black text-white py-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
+            <div class="text-center md:text-left space-y-3">
+                <div class="flex items-center justify-center md:justify-start">
+                    <svg viewBox="0 0 560 130" class="h-9 sm:h-10 w-auto overflow-visible">
+                        <use href="#guniva-magneto-logo"></use>
+                    </svg>
+                    <span class="text-xs font-serif tracking-widest text-gray-400 ml-3">WINERY</span>
+                </div>
+                <p class="text-xs text-gray-400 font-sans">澳大利亞 維多利亞州 蒙塔山酒莊 / 蘇蘇洛酒莊 / 奧塔瓦酒莊</p>
+            </div>
+
+            <div class="text-xs text-gray-400 font-sans text-center md:text-right space-y-1">
+                <p>線上客服時間：Mon - Fri 09:00 - 18:00</p>
+                <p>© 2026 GunivA Winery. All Rights Reserved.</p>
+            </div>
+        </div>
+
+        <div class="mt-8 bg-wine-red text-white text-center py-3 text-sm tracking-widest font-sans uppercase font-bold">
+            禁止酒駕 · 酒後不開車 安全有保障 | 未滿十八歲禁止飲酒
+        </div>
+    </footer>
+
+    <!-- Alpine.js Application Logic -->
+    <script>
+        function wineApp() {
+            return {
+                activeTone: 'rose',
+                filterType: 'all',
+                filterSeries: 'all',
+                mood: 'romantic',
+                openCartModal: false,
+                showSuccessModal: false,
+                modalMessage: '',
+                orderNote: '',
+                cart: [],
+                contactForm: {
+                    name: '',
+                    contact: '',
+                    type: '品酒推薦',
+                    message: ''
+                },
+
+                wines: [
+                    { id: 1, nameEn: 'Homeblock Estate Shiraz', nameZh: '霍布洛克/西拉子', region: '澳大利亞 維多利亞州 蒙塔山酒莊 (Montara)', price: 600, series: '特級款', type: 'red', image: 'mywork/Homeblock.jpg' },
+                    { id: 2, nameEn: 'Raven Park Moscato', nameZh: '瑞芬公園/莫斯卡托', region: '澳大利亞 維多利亞州 蒙塔山酒莊 (Montara)', price: 690, series: '特級款', type: 'white', image: 'mywork/Montars raven park.jpg' },
+                    { id: 3, nameEn: 'Jimmy Shiraz', nameZh: '吉米/西拉子', region: '維多利亞州 格蘭屏 蒙塔山酒莊 (Montara)', price: 900, series: '特藏款', type: 'red', image: 'mywork/Jimmy Shiraz.jpg' },
+                    { id: 4, nameEn: 'Jimmy Cabernet Sauvignon', nameZh: '吉米/赤霞珠', region: '維多利亞州 格蘭屏 蒙塔山酒莊 (Montara)', price: 900, series: '特藏款', type: 'red', image: 'mywork/jimmy-cabernet-sauvignon.png' },
+                    { id: 5, nameEn: 'Jimmy Chardonnay', nameZh: '吉米/霞多麗', region: '維多利亞州 格蘭屏 蒙塔山酒莊 (Montara)', price: 900, series: '特藏款', type: 'white', image: 'mywork/jimmy-chardonnay.png' },
+                    { id: 6, nameEn: 'Jimmy Pinot Noir', nameZh: '吉米/黑皮諾', region: '維多利亞州 格蘭屏 蒙塔山酒莊 (Montara)', price: 900, series: '特藏款', type: 'red', image: 'mywork/jimmy-shiraz.png' },
+                    { id: 7, nameEn: 'Jimmy Pinot Gris', nameZh: '吉米/灰皮諾', region: '維多利亞州 格蘭屏 蒙塔山酒莊 (Montara)', price: 900, series: '特藏款', type: 'white', image: 'mywork/jimmy-Pinot Gris.jpg' },
+                    { id: 8, nameEn: 'Jimmy Rosé', nameZh: '吉米/玫瑰粉紅酒', region: '維多利亞州 格蘭屏 蒙塔山酒莊 (Montara)', price: 900, series: '特藏款', type: 'rose', image: 'mywork/jimmy-rose.png' },
+                    { id: 9, nameEn: 'Montara Shiraz', nameZh: '蒙塔山/格蘭屏/西拉子', region: '澳大利亞 維多利亞州 蒙塔山酒莊 (Montara)', price: 1800, series: '限量經典款', type: 'red', image: 'mywork/Montara Shiraz.jpg' },
+                    { id: 10, nameEn: 'Montara Cabernet Sauvignon', nameZh: '蒙塔山/格蘭屏/赤霞珠', region: '澳大利亞 維多利亞州 蒙塔山酒莊 (Montara)', price: 1800, series: '限量經典款', type: 'red', image: 'mywork/Montara Shiraz.jpg' },
+                    { id: 11, nameEn: 'Chalambar Road Shiraz', nameZh: '蒙塔山/查倫巴/西拉子', region: '澳大利亞 維多利亞州 蒙塔山酒莊 (Montara)', price: 5700, series: '限量珍藏款', type: 'red', image: 'mywork/chalambar-road-shiraz.png' },
+                    { id: 12, nameEn: 'Chalambar Road Cabernet Sauvignon', nameZh: '蒙塔山/查倫巴/赤霞珠', region: '澳大利亞 維多利亞州 蒙塔山酒莊 (Montara)', price: 5700, series: '限量珍藏款', type: 'red', image: 'mywork/chalambar-road-cabernet-sauvignon.png' },
+                    { id: 15, nameEn: 'Chalambar Road Pinot Noir', nameZh: '蒙塔山/查倫巴/黑皮諾', region: '澳大利亞 維多利亞州 蒙塔山酒莊 (Montara)', price: 5700, series: '限量珍藏款', type: 'red', image: 'mywork/montara-chalambar-road-pinot-noir.jpg' },
+                    { id: 16, nameEn: 'Montepuliciano Aglianico', nameZh: '蒙特普齊亞諾 艾格尼科', region: '維多利亞州 蘇蘇洛酒莊 (Susuro Wines)', price: 1875, series: '限量珍藏款', type: 'red', image: 'mywork/Susuro-Monte-Aglianco.jpg' },
+                    { id: 17, nameEn: 'Nero d\' Avola Mclaren Vale', nameZh: '尼洛達沃拉', region: '維多利亞州 蘇蘇洛酒莊 (Susuro Wines)', price: 1875, series: '限量珍藏款', type: 'red', image: 'mywork/Susuro-Nero-davola.jpg' },
+                    { id: 18, nameEn: 'Sagrantino Adelaide Hills', nameZh: '薩格蘭蒂諾', region: '維多利亞州 蘇蘇洛酒莊 (Susuro Wines)', price: 1875, series: '限量珍藏款', type: 'red', image: 'mywork/Susuro-Sagrantino.jpg' },
+                    { id: 19, nameEn: 'VIOLONCELLO Shiraz', nameZh: '大提琴/西拉子', region: '維多利亞州 奧塔瓦酒莊 (OCTTAVA Wines)', price: 750, series: '特藏款', type: 'red', image: 'mywork/OCTTAVA Violoncello Shiraz.jpg' },
+                    { id: 20, nameEn: 'Custom Laser Engraved Pine Box', nameZh: '高級松木禮盒 (專屬雷射雕刻)', region: '可提供圖樣或文字客製雕刻', price: 0, series: '客製周邊', type: 'gift' }
+                ],
+
+                setTone(tone) {
+                    this.activeTone = tone;
+                },
+
+                get filteredWines() {
+                    return this.wines.filter(wine => {
+                        const typeMatch = this.filterType === 'all' || wine.type === this.filterType;
+                        const seriesMatch = this.filterSeries === 'all' || wine.series === this.filterSeries;
+                        return typeMatch && seriesMatch;
+                    });
+                },
+
+                get recommendedWine() {
+                    if (this.mood === 'romantic') {
+                        return { ...this.wines.find(w => w.id === 8), quote: '柔和的粉紅酒澤，適合深夜微醺時分的雙人呢喃。' };
+                    } else if (this.mood === 'friend') {
+                        return { ...this.wines.find(w => w.id === 3), quote: '經典果香層次，最適合與三五知己暢談心事。' };
+                    } else if (this.mood === 'solitude') {
+                        return { ...this.wines.find(w => w.id === 11), quote: '珍藏老藤，靜靜品味格蘭屏兩億年地質與星空的曠遠。' };
+                    } else {
+                        return { ...this.wines.find(w => w.id === 20), quote: '可提供圖樣或文字客製雷射雕刻，展現無可替代的尊貴心意。' };
+                    }
+                },
+
+                addToCart(wine) {
+                    const existing = this.cart.find(item => item.id === wine.id);
+                    if (existing) {
+                        existing.qty++;
+                    } else {
+                        this.cart.push({ ...wine, qty: 1 });
+                    }
+                    this.openCartModal = true;
+                },
+
+                updateQty(index, change) {
+                    this.cart[index].qty += change;
+                    if (this.cart[index].qty <= 0) {
+                        this.cart.splice(index, 1);
+                    }
+                },
+
+                get cartTotalItems() {
+                    return this.cart.reduce((sum, item) => sum + item.qty, 0);
+                },
+
+                get cartTotalBottles() {
+                    return this.cart.filter(i => i.type !== 'gift').reduce((sum, item) => sum + item.qty, 0);
+                },
+
+                get calculatedBoxes() {
+                    return Math.max(1, Math.ceil(this.cartTotalBottles / 6));
+                },
+
+                get shippingCost() {
+                    if (this.cartTotalBottles === 0) return 0;
+                    return this.calculatedBoxes >= 2 ? 0 : 170;
+                },
+
+                get grandTotal() {
+                    const wineSubtotal = this.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+                    return wineSubtotal + this.shippingCost;
+                },
+
+                submitOrder() {
+                    if (this.cart.length === 0) {
+                        this.modalMessage = '您的預訂單內尚無商品，請先選擇佳釀！';
+                        this.showSuccessModal = true;
+                        return;
+                    }
+                    this.modalMessage = '感謝您的預訂！GunivA 酒莊專員將會儘快與您聯繫，確認配送細節與客製需求。';
+                    this.cart = [];
+                    this.openCartModal = false;
+                    this.showSuccessModal = true;
+                },
+
+                submitContact() {
+                    if (!this.contactForm.name || !this.contactForm.contact) {
+                        this.modalMessage = '請填寫您的姓名與聯絡方式，以便專員與您聯繫。';
+                        this.showSuccessModal = true;
+                        return;
+                    }
+                    this.modalMessage = `感謝 ${this.contactForm.name} 閣下的諮詢！專員已收到您的需求（${this.contactForm.type}），我們將於 24 小時內儘快與您聯繫。`;
+                    this.contactForm = { name: '', contact: '', type: '品酒推薦', message: '' };
+                    this.showSuccessModal = true;
+                }
+            }
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

@@ -706,19 +706,20 @@
                         </select>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[11px] text-gray-500 font-sans mb-1">訂購酒款</label>
-                            <select x-model.number="selectedWineId" class="w-full border border-gray-200 p-2.5 text-xs focus:outline-none focus:border-black rounded-xl bg-wine-paper/30">
-                                <template x-for="wine in wines" :key="wine.id">
-                                    <option :value="wine.id" x-text="wine.nameZh"></option>
-                                </template>
-                            </select>
+                    <div>
+                        <label class="block text-[11px] text-gray-500 font-sans mb-1">訂購酒款（可複選）</label>
+                        <div class="border border-gray-200 rounded-xl bg-wine-paper/30 max-h-56 overflow-y-auto divide-y divide-gray-100">
+                            <template x-for="wine in wines" :key="wine.id">
+                                <label class="flex items-center justify-between gap-3 p-2.5 cursor-pointer hover:bg-white/70">
+                                    <span class="flex items-center gap-2 min-w-0">
+                                        <input type="checkbox" :value="String(wine.id)" x-model="selectedWineIds" class="accent-wine-red" />
+                                        <span class="text-xs truncate" x-text="wine.nameEn"></span>
+                                    </span>
+                                    <input type="number" min="1" :disabled="!selectedWineIds.includes(String(wine.id))" x-model.number="selectedQuantities[wine.id]" class="w-16 border border-gray-200 p-1.5 text-xs text-center focus:outline-none focus:border-black rounded-lg bg-white disabled:opacity-40" aria-label="訂購瓶數" />
+                                </label>
+                            </template>
                         </div>
-                        <div>
-                            <label class="block text-[11px] text-gray-500 font-sans mb-1">訂購瓶數</label>
-                            <input type="number" min="1" x-model.number="selectedQuantity" class="w-full border border-gray-200 p-2.5 text-xs focus:outline-none focus:border-black rounded-xl bg-wine-paper/30" />
-                        </div>
+                        <p class="text-[10px] text-gray-400 font-sans mt-1">請勾選一款以上，並填寫各款瓶數。</p>
                     </div>
 
                     <div class="border-y border-gray-100 py-3 text-xs font-sans text-gray-600 space-y-1">
@@ -805,8 +806,8 @@
                 mood: 'romantic',
                 showSuccessModal: false,
                 modalMessage: '',
-                selectedWineId: 1,
-                selectedQuantity: 1,
+                selectedWineIds: ['1'],
+                selectedQuantities: { 1: 1 },
                 contactForm: {
                     name: '',
                     contact: '',
@@ -860,21 +861,32 @@
                 },
 
                 selectWine(wine) {
-                    this.selectedWineId = wine.id;
-                    this.selectedQuantity = 1;
+                    const wineId = String(wine.id);
+                    if (!this.selectedWineIds.includes(wineId)) {
+                        this.selectedWineIds.push(wineId);
+                    }
+                    this.selectedQuantities[wine.id] = 1;
                     document.getElementById('pairing').scrollIntoView({ behavior: 'smooth' });
                 },
 
-                get selectedWine() {
-                    return this.wines.find(wine => wine.id === this.selectedWineId) || this.wines[0];
+                get selectedOrderItems() {
+                    return this.wines
+                        .filter(wine => this.selectedWineIds.includes(String(wine.id)))
+                        .map(wine => ({
+                            wine,
+                            quantity: Math.max(1, Number(this.selectedQuantities[wine.id]) || 1)
+                        }));
                 },
 
                 get orderSubtotal() {
-                    return this.selectedWine.price * Math.max(1, Number(this.selectedQuantity) || 1);
+                    return this.selectedOrderItems.reduce((subtotal, item) => subtotal + item.wine.price * item.quantity, 0);
                 },
 
                 get orderDiscount() {
-                    return this.selectedWine.type !== 'gift' && this.selectedQuantity >= 6
+                    const bottleCount = this.selectedOrderItems
+                        .filter(item => item.wine.type !== 'gift')
+                        .reduce((count, item) => count + item.quantity, 0);
+                    return bottleCount >= 6
                         ? Math.round(this.orderSubtotal * 0.1)
                         : 0;
                 },
@@ -889,9 +901,16 @@
                         this.showSuccessModal = true;
                         return;
                     }
-                    this.modalMessage = `感謝 ${this.contactForm.name} 閣下的預訂！聯絡方式：${this.contactForm.contact}。您選擇的酒款為 ${this.selectedWine.nameZh}，數量 ${this.selectedQuantity} 瓶，預估金額 NT$ ${this.orderTotal}。專員將儘快與您聯繫確認訂單。`;
+                    if (!this.selectedOrderItems.length) {
+                        this.modalMessage = '請至少選擇一款酒，並填寫訂購瓶數。';
+                        this.showSuccessModal = true;
+                        return;
+                    }
+                    const orderSummary = this.selectedOrderItems
+                        .map(item => `${item.wine.nameEn} x ${item.quantity} 瓶`)
+                        .join('、');
+                    this.modalMessage = `感謝 ${this.contactForm.name} 閣下的預訂！聯絡方式：${this.contactForm.contact}。您選擇的酒款為 ${orderSummary}，預估金額 NT$ ${this.orderTotal}。專員將儘快與您聯繫確認訂單。`;
                     this.contactForm = { name: '', contact: '', type: '品酒推薦', message: '' };
-                    this.selectedQuantity = 1;
                     this.showSuccessModal = true;
                 },
 

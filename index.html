@@ -658,6 +658,10 @@
                         <strong class="block mb-1">免運優惠方案：</strong>
                         單次訂購 兩瓶以上（含兩瓶），享全台免費宅配到府。
                     </li>
+                    <li>
+                        <strong class="text-black block mb-1">運送方式：</strong>
+                        採用黑貓宅急便配送。
+                    </li>
                     <li class="text-wine-red font-medium">
                         <strong class="block mb-1">滿箱優惠方案：</strong>
                         單次訂購滿 6 瓶（1 箱），商品總額享 9 折優惠。
@@ -712,7 +716,7 @@
                             <template x-for="wine in wines" :key="wine.id">
                                 <label class="flex items-center justify-between gap-3 p-2.5 cursor-pointer hover:bg-white/70">
                                     <span class="flex items-center gap-2 min-w-0">
-                                        <input type="checkbox" :value="String(wine.id)" x-model="selectedWineIds" class="accent-wine-red" />
+                                        <input type="checkbox" :value="String(wine.id)" x-model="selectedWineIds" @change="if ($event.target.checked && !selectedQuantities[wine.id]) selectedQuantities[wine.id] = 1" class="accent-wine-red" />
                                         <span class="text-xs truncate" x-text="wine.nameEn"></span>
                                     </span>
                                     <input type="number" min="1" :disabled="!selectedWineIds.includes(String(wine.id))" x-model.number="selectedQuantities[wine.id]" class="w-16 border border-gray-200 p-1.5 text-xs text-center focus:outline-none focus:border-black rounded-lg bg-white disabled:opacity-40" aria-label="訂購瓶數" />

@@ -746,8 +746,8 @@
                         <textarea x-model="contactForm.message" rows="2" placeholder="請告訴我們您的品味偏好、欲刻印的文字或預計送禮場合..." class="w-full border border-gray-200 p-2.5 text-xs focus:outline-none focus:border-black rounded-xl bg-wine-paper/30"></textarea>
                     </div>
 
-                    <button type="submit" class="w-full py-3 bg-black text-white text-xs tracking-widest uppercase hover:bg-wine-red transition duration-300 rounded-full font-sans shadow-md">
-                        送出預訂 · 專員 24H 內回覆
+                    <button type="submit" :disabled="isSubmitting" class="w-full py-3 bg-black text-white text-xs tracking-widest uppercase hover:bg-wine-red disabled:opacity-60 disabled:cursor-wait transition duration-300 rounded-full font-sans shadow-md">
+                        <span x-text="isSubmitting ? '正在送出至 GunivA 表單…' : '送出預訂 · 專員 24H 內回覆'"></span>
                     </button>
                 </form>
             </div>
@@ -809,6 +809,7 @@
                 filterSeries: 'all',
                 mood: 'romantic',
                 showSuccessModal: false,
+                isSubmitting: false,
                 modalMessage: '',
                 selectedWineIds: ['1'],
                 selectedQuantities: { 1: 1 },
@@ -899,7 +900,7 @@
                     return this.orderSubtotal - this.orderDiscount;
                 },
 
-                submitOrder() {
+                async submitOrder() {
                     if (!this.contactForm.name || !this.contactForm.contact) {
                         this.modalMessage = '請填寫訂購人姓名與聯絡方式，以便專員與您聯繫確認訂單。';
                         this.showSuccessModal = true;
@@ -913,8 +914,81 @@
                     const orderSummary = this.selectedOrderItems
                         .map(item => `${item.wine.nameEn} x ${item.quantity} 瓶`)
                         .join('、');
-                    this.modalMessage = `感謝 ${this.contactForm.name} 閣下的預訂！聯絡方式：${this.contactForm.contact}。您選擇的酒款為 ${orderSummary}，預估金額 NT$ ${this.orderTotal}。專員將儘快與您聯繫確認訂單。`;
+
+                    // Google 表單欄位 ID：已依目前表單逐一核對。
+                    const formEndpoint = 'https://docs.google.com/forms/d/e/1FAIpQLSehC8TAaZSelg27jDRSVyRvL9CwAiSUvcDcVtO-JEIi3lC5qA/formResponse';
+                    const field = {
+                        name: 'entry.1528142835',
+                        contact: 'entry.636977761',
+                        inquiryType: 'entry.600311914',
+                        wines: 'entry.1670510610',
+                        note: 'entry.1185315203',
+                        quantities: {
+                            1: 'entry.1158567472', 2: 'entry.946976359', 3: 'entry.313112288',
+                            4: 'entry.1983784352', 5: 'entry.2041190247', 6: 'entry.1553527487',
+                            7: 'entry.1094022856', 8: 'entry.1873714827', 9: 'entry.2019269497',
+                            10: 'entry.1722037852', 11: 'entry.1705645337', 12: 'entry.1706998612',
+                            15: 'entry.318392469', 16: 'entry.1025278301', 17: 'entry.462563823',
+                            18: 'entry.1237413405', 19: 'entry.1689003602', 20: 'entry.614380634'
+                        }
+                    };
+                    const formWineNames = {
+                        1: 'Homeblock Estate Shiraz｜霍布洛克／西拉子（NT$ 780）',
+                        2: 'Raven Park Moscato｜瑞芬公園／莫斯卡托（NT$ 900）',
+                        3: 'Jimmy Shiraz｜吉米／西拉子（NT$ 1,170）',
+                        4: 'Jimmy Cabernet Sauvignon｜吉米／赤霞珠（NT$ 1,170）',
+                        5: 'Jimmy Chardonnay｜吉米／霞多麗（NT$ 1,170）',
+                        6: 'Jimmy Pinot Noir｜吉米／黑皮諾（NT$ 1,170）',
+                        7: 'Jimmy Pinot Gris｜吉米／灰皮諾（NT$ 1,170）',
+                        8: 'Jimmy Rosé｜吉米／玫瑰粉紅酒（NT$ 1,170）',
+                        9: 'Montara Shiraz｜蒙塔山／格蘭屏／西拉子（NT$ 2,340）',
+                        10: 'Montara Cabernet Sauvignon｜蒙塔山／格蘭屏／赤霞珠（NT$ 2,340）',
+                        11: 'Chalambar Road Shiraz｜蒙塔山／查倫巴／西拉子（NT$ 7,410）',
+                        12: 'Chalambar Road Cabernet Sauvignon｜蒙塔山／查倫巴／赤霞珠（NT$ 7,410）',
+                        15: 'Chalambar Road Pinot Noir｜蒙塔山／查倫巴／黑皮諾（NT$ 7,410）',
+                        16: 'Montepuliciano Aglianico｜蒙特普齊亞諾・艾格尼科（NT$ 2,438）',
+                        17: "Nero d' Avola Mclaren Vale｜尼洛達沃拉（NT$ 2,438）",
+                        18: 'Sagrantino Adelaide Hills｜薩格蘭蒂諾（NT$ 2,438）',
+                        19: 'VIOLONCELLO Shiraz｜大提琴／西拉子（NT$ 975）',
+                        20: 'Custom Laser Engraved Pine Box｜高級松木禮盒（專屬雷射雕刻）（另行報價）'
+                    };
+                    const inquiryType = {
+                        '品酒推薦': '今夜選酒／談心微醺推薦',
+                        '客製雷雕禮盒': '松木禮盒專屬雷射雕刻客製',
+                        '企業團購合作': '企業三節採購／大量訂購',
+                        '餐廳與通路上架': '餐廳合作／通路經銷詢價'
+                    }[this.contactForm.type];
+                    const payload = new URLSearchParams();
+                    payload.append(field.name, this.contactForm.name);
+                    payload.append(field.contact, this.contactForm.contact);
+                    payload.append(field.inquiryType, inquiryType);
+                    payload.append(field.note, this.contactForm.message || '');
+                    this.selectedOrderItems.forEach(({ wine, quantity }) => {
+                        payload.append(field.wines, formWineNames[wine.id]);
+                        payload.append(field.quantities[wine.id], String(quantity));
+                    });
+
+                    this.isSubmitting = true;
+                    try {
+                        // Google 表單不提供跨網域回應；no-cors 是正常且可提交的送出方式。
+                        await fetch(formEndpoint, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+                            body: payload.toString()
+                        });
+                    } catch (error) {
+                        this.modalMessage = '目前無法連線至表單，請確認網路後再試一次。';
+                        this.showSuccessModal = true;
+                        return;
+                    } finally {
+                        this.isSubmitting = false;
+                    }
+
+                    this.modalMessage = `感謝 ${this.contactForm.name} 閣下的預訂！已送出至 GunivA 專屬諮詢表單。您選擇的酒款為 ${orderSummary}，預估金額 NT$ ${this.orderTotal.toLocaleString()}。專員將於 24 小時內與您聯繫確認訂單。`;
                     this.contactForm = { name: '', contact: '', type: '品酒推薦', message: '' };
+                    this.selectedWineIds = [];
+                    this.selectedQuantities = {};
                     this.showSuccessModal = true;
                 },
 

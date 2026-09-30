@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+Sitemap: https://gunivawines-dev.github.io/gunivawines/sitemap.xml
 # Add the site's full absolute sitemap URL after the production domain is confirmed.

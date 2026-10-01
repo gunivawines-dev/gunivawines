@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GunivA Winery</title>
-    <meta name="description" content="GunivA Winery 精選澳洲葡萄酒與維多利亞州葡萄酒，從墨爾本探索精品紅酒、白酒、粉紅酒與客製雷雕禮盒，為每次相聚帶來溫暖真摯的微醺時光。">
+    <title>GunivA Winery｜澳洲紅酒・維多利亞州精品葡萄酒｜客製雷雕禮盒</title>
+    <meta name="description" content="GunivA Winery 嚴選澳洲維多利亞州紅酒,包含西拉子、赤霞珠、黑皮諾,另有白酒、粉紅酒與松木雷雕客製禮盒,台灣宅配到府,兩瓶免運。">
     <meta name="keywords" content="GunivA, GunivA Winery, 澳洲葡萄酒, 維多利亞州葡萄酒, 墨爾本葡萄酒, 澳洲紅酒, 精品酒莊, 客製禮盒, 雷雕酒盒">
     <meta name="author" content="GunivA Winery">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="googlebot" content="index, follow, max-image-preview:large">
     <meta name="theme-color" content="#E10600">
-    <link rel="canonical" href="./">
+    <link rel="canonical" href="https://gunivawines-dev.github.io/gunivawines/">
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
 
@@ -18,14 +18,15 @@
     <meta property="og:type" content="website">
     <meta property="og:locale" content="zh_TW">
     <meta property="og:site_name" content="GunivA Winery">
-    <meta property="og:title" content="GunivA Winery">
+    <meta property="og:url" content="https://gunivawines-dev.github.io/gunivawines/">
+    <meta property="og:title" content="GunivA Winery｜澳洲紅酒・維多利亞州精品葡萄酒">
     <meta property="og:description" content="精選澳洲葡萄酒、維多利亞州葡萄酒與墨爾本精品佳釀，提供紅酒、白酒、粉紅酒及客製雷雕禮盒。">
-    <meta property="og:image" content="favicon.png">
+    <meta property="og:image" content="https://gunivawines-dev.github.io/gunivawines/favicon.png">
     <meta property="og:image:alt" content="GunivA Winery 品牌 Logo">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="GunivA Winery">
     <meta name="twitter:description" content="精選澳洲葡萄酒、維多利亞州葡萄酒與墨爾本精品佳釀，提供客製雷雕禮盒。">
-    <meta name="twitter:image" content="favicon.png">
+    <meta name="twitter:image" content="https://gunivawines-dev.github.io/gunivawines/favicon.png">
 
     <!-- Structured data helps Google understand the brand and its logo. -->
     <script type="application/ld+json">
@@ -51,6 +52,19 @@
                 "url": "./",
                 "inLanguage": "zh-TW",
                 "publisher": { "@id": "#organization" }
+            },
+            {
+                "@type": "Product",
+                "name": "Jimmy Shiraz 吉米西拉子 澳洲紅酒",
+                "description": "澳洲維多利亞州格蘭屏 Montara 酒莊紅酒",
+                "brand": { "@type": "Brand", "name": "GunivA Winery" },
+                "offers": {
+                    "@type": "Offer",
+                    "priceCurrency": "TWD",
+                    "price": "1170",
+                    "availability": "https://schema.org/InStock",
+                    "url": "https://gunivawines-dev.github.io/gunivawines/#collection"
+                }
             }
         ]
     }
@@ -566,6 +580,10 @@
                 <button @click="filterType = 'gift'" :class="filterType === 'gift' ? 'bg-black text-white' : 'border border-gray-200 text-gray-600 hover:border-black'" class="px-5 py-2.5 rounded-full transition duration-300">客製禮盒</button>
             </div>
         </div>
+
+        <noscript>
+            <p>GunivA 提供澳洲維多利亞州紅酒:Jimmy 西拉子、Jimmy 赤霞珠、Jimmy 黑皮諾、Montara 西拉子、Chalambar Road 西拉子、OCTTAVA 大提琴西拉子,以及 Susuro 義大利品種紅酒。</p>
+        </noscript>
 
         <!-- Series Filter Sub-bar -->
         <div class="flex items-center space-x-6 text-xs text-gray-500 font-sans mb-10 overflow-x-auto pb-2">
